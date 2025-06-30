@@ -35,25 +35,27 @@ public class Program {
 				line = br.readLine();
 			}
 
+			System.out.println();
+			System.out.println("Cinco primeiras vendas de 2016 de maior preço médio");
+			sales.stream().filter(sale -> sale.getYear() == 2016)
+					.sorted((x, y) -> y.averagePrice().compareTo(x.averagePrice())).limit(5)
+					.forEach(System.out::println);
+
+			Double loganTotalValue = sales.stream()
+					.filter(sale -> sale.getSeller().equals("Logan") && (sale.getMonth() == 1 || sale.getMonth() == 7))
+					.map(sale -> sale.getTotal()).reduce(0.0, (x, y) -> x + y);
+
+			System.out.println();
+			System.out.printf("Valor total vendido pelo vendedor Logan nos meses 1 e 7 = %.2f", loganTotalValue);
+
 		} catch (FileNotFoundException e) {
 			System.out.println("Erro: " + path + " (O sistema não pode encontrar o arquivo especificado)");
 		} catch (IOException e) {
 			System.out.println("Erro: " + e.getMessage());
+		} finally {
+			sc.close();
 		}
 
-		System.out.println();
-		System.out.println("Cinco primeiras vendas de 2016 de maior preço médio");
-		sales.stream().filter(sale -> sale.getYear() == 2016)
-				.sorted((x, y) -> y.averagePrice().compareTo(x.averagePrice())).limit(5).forEach(System.out::println);
-
-		Double loganTotalValue = sales.stream()
-				.filter(sale -> sale.getSeller().equals("Logan") && (sale.getMonth() == 1 || sale.getMonth() == 7))
-				.map(sale -> sale.getTotal()).reduce(0.0, (x, y) -> x + y);
-
-		System.out.println();
-		System.out.printf("Valor total vendido pelo vendedor Logan nos meses 1 e 7 = %.2f", loganTotalValue);
-
-		sc.close();
 	}
 
 }
